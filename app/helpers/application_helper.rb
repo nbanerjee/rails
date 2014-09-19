@@ -7,4 +7,5 @@ def full_title(title)
       "#{base_title} | #{title}"
     end
   end
+
 end
