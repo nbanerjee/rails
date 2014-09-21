@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   get 'static_pages/contact'
   get 'static_pages/about'
   resources :users
+  resources :microposts, only:[:create, :destroy]
   resources :sessions, only:[:new, :create, :destroy]
   match '/signin', to: 'sessions#new', via: 'get'
   match '/signout', to: 'sessions#destroy', via: 'get'
