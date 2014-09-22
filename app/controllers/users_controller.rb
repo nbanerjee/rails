@@ -20,7 +20,7 @@ class UsersController < ApplicationController
   def edit
     @user = User.find(params[:id])
   end
-  
+
   def update
     @user = User.find(params[:id])
     if(@user.update_attributes(users_param))
@@ -36,9 +36,9 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    @microposts = @user.microposts.paginate(page: params[:page]) 
+    @feed_items = @user.feed.paginate(page: params[:page])
   end
-  
+
   def destroy
     @user = User.find(params[:id])
     @user.destroy
