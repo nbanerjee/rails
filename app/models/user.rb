@@ -4,13 +4,15 @@ class User < ActiveRecord::Base
   has_many :followed_users, through: :relationships, source: :followed
   has_many :reverse_relationships, foreign_key: "followed_id", class_name: "Relationship", dependent: :destroy
   has_many :followers, through: :reverse_relationships, source: :follower
-  validates :name, presence: true, length: { maximum: 50 }
-  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-  validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
+
   before_save  { self.email = email.downcase }
   before_create :create_remember_token
-  has_secure_password
+
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  validates :name, presence: true, length: { maximum: 50 }
+  validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
   validates :password, presence: true, length: { minimum: 6 }
+  has_secure_password
 
   def User.new_remember_token
     SecureRandom.urlsafe_base64
@@ -21,8 +23,8 @@ class User < ActiveRecord::Base
   end
 
   def feed
-    # This is preliminary. See "Following users" for the full implementation.
-    Micropost.where("user_id = ?", id)
+   self.microposts
+   # Micropost.where("user_id = ?", id)
   end
 
   def following?(other_user)
@@ -42,4 +44,5 @@ class User < ActiveRecord::Base
   def create_remember_token
     self.remember_token = User.new_remember_token
   end
+
 end
