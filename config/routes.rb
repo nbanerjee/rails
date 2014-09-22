@@ -3,7 +3,12 @@ Rails.application.routes.draw do
   get 'static_pages/home'
   get 'static_pages/contact'
   get 'static_pages/about'
-  resources :users
+  resources :users do
+    member do
+      get :following, :followers
+    end
+  end
+  resources :relationships, only: [:create, :destroy]
   resources :microposts, only:[:create, :destroy]
   resources :sessions, only:[:new, :create, :destroy]
   match '/signin', to: 'sessions#new', via: 'get'
